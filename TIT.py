@@ -1,119 +1,114 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
-import streamlit as st
-import numpy as np 
-import pandas as pd 
-import shap
-import joblib
-from PIL import Image
-from tensorflow.keras.models import load_model
-import matplotlib.pyplot as plt
-
-
-# In[ ]:
-
-
-background_data = pd.read_csv('background_data.csv')
-
-
-# In[ ]:
-
-
-plt.style.use('default')
-
-
-# In[ ]:
-
-
-st.markdown("<h1 style='text-align: center; color: black;'>Online Interpretable Machine Learning Models For Dynamic Prediction Of Thrombocytopenia Risk In Acute Ischemic Stroke Patients Undergoing Tirofiban-assisted Mechanical Thrombectomy</h1>", unsafe_allow_html=True)
-
-
-# In[ ]:
-
-
-def user_input_features():
-    st.sidebar.header('Make a prediction')
-    st.sidebar.write('User input parameters below ⬇️')
-    a1 = st.sidebar.number_input("age")
-    a2 = st.sidebar.number_input("diastolic blood pressure")
-    a3 = st.sidebar.number_input("platelets (*10^9)")
-    a4 = st.sidebar.number_input("INR")
-    a5 = st.sidebar.number_input("serum creatinine")
-    a6 = st.sidebar.number_input("triglyceride")
-    a7 = st.sidebar.number_input("thrombectomy passes")
-    output = [a1,a2,a3,a4,a5,a6,a7]
-    return output
-
-outputdf = user_input_features()
-
-
-# In[ ]:
-
-
-# If button is pressed
-if st.button("Submit"):
-    
-    # Unpickle classifier
-    ANN = load_model('ANN_model.h5')
-    #标准化
-    a1 = outputdf[0]
-    a2 = outputdf[1]
-    a3 = outputdf[2]
-    a4 = outputdf[3]
-    a5 = outputdf[4]
-    a6 = outputdf[5]
-    a7 = outputdf[6]
-    
-    
-    # Store inputs into dataframe
-    a1s=(a1-66.87)/11.982
-    a2s=(a2-82.21)/14.389
-    a3s=(a3-204.82)/44.218
-    a4s=(a4-1.0006)/0.0769
-    a5s=(a5-71.9399)/20.98994
-    a6s=(a6-1.2196)/0.55119
-    a7s=(a7-2.15)/1.203
-    
-    stdf = [a1s,a2s,a3s,a4s,a5s,a6s,a7s]
-    
-    X = pd.DataFrame([outputdf], columns= ["age","DBP","platelet","INR","Scr","TG","passes"])
-    X_standard = pd.DataFrame([stdf], columns= ["age","DBP","platelet","INR","Scr","TG","passes"])
-    # Get prediction
-    p1 = ANN.predict(X_standard)[0]
-    p2 = ANN.predict(X_standard)[0,-1]
-    m1 = round(float(p2) * 100, 2)
-    p3 = "%.2f%%" % (m1)
-
-    # Output prediction
-    st.write(f'Predicted results: {p1}')
-    st.write('0️⃣ means non-TIT, 1️⃣ means TIT')
-    st.text(f"Prediction probabilities：1️⃣ {p3}")
-    
-    #SHAP
-    st.title('SHAP')
-    
-    #个例
-    
-    
-    explainer_ANN = shap.KernelExplainer(ANN.predict,background_data)
-    shap_values= explainer_ANN.shap_values(X_standard)
-    
-    st.set_option('deprecation.showPyplotGlobalUse', False)
-    shap.force_plot(explainer_ANN.expected_value,shap_values[0],X.iloc[0],matplotlib=True)
-
-    #shap瀑布图
-    #shap_values2 = explainer_xgb(X_standard) 
-    #shap.plots.waterfall(shap_values2[0])
-    st.pyplot(bbox_inches='tight')
-    
-
-
-# In[ ]:
-
-
-
-
+absl-py==1.3.0
+altair==5.1.2
+astunparse==1.6.3
+attrs==25.1.0
+blinker==1.7.0
+cachetools==5.2.0
+catboost==1.2.2
+certifi==2025.1.31
+charset-normalizer==3.4.1
+click==8.1.8
+cloudpickle==3.1.1
+colorama==0.4.6
+contourpy==1.3.0
+cvxopt==1.3.0
+cvxpy==1.3.0
+cycler==0.12.1
+ecos==2.0.12
+fancyimpute==0.7.0
+flatbuffers==25.2.10
+fonttools==4.56.0
+gast==0.4.0
+gitdb==4.0.11
+GitPython==3.1.40
+google-auth==2.14.1
+google-auth-oauthlib==0.4.6
+google-pasta==0.2.0
+graphviz==0.20
+grpcio==1.50.0
+h5py==3.13.0
+idna==3.10
+imbalanced-learn==0.9.1
+imblearn==0.0
+importlib_metadata==8.6.1
+importlib_resources==6.5.2
+Jinja2==3.1.6
+joblib==1.4.2
+jsonschema==4.23.0
+jsonschema-specifications==2024.10.1
+keras==3.9.0
+Keras-Preprocessing==1.1.2
+kiwisolver==1.4.7
+knnimpute==0.1.0
+libclang==14.0.6
+lightgbm==3.3.5
+llvmlite==0.43.0
+Markdown==3.7
+markdown-it-py==3.0.0
+MarkupSafe==3.0.2
+matplotlib==3.9.4
+mdurl==0.1.2
+mice==0.1.30
+ml-dtypes==0.4.1
+mlxtend==0.23.0
+namex==0.0.8
+numba==0.60.0
+numpy==2.0.2
+oauthlib==3.2.2
+opt-einsum==3.3.0
+optree==0.14.1
+osqp==0.6.2.post8
+packaging==24.2
+pandas==2.2.3
+pillow==11.1.0
+plotly-express==0.4.1
+protobuf==5.29.3
+pyarrow==14.0.0
+pydeck==0.8.1b0
+pygbm==0.1.0
+Pygments==2.16.1
+pyparsing==3.2.1
+python-dateutil==2.9.0.post0
+pytorch-tabnet==4.0
+pytz==2025.1
+pyzmq==25.1.2
+qdldl==0.1.5.post3
+referencing==0.36.2
+requests==2.32.3
+requests-oauthlib==1.3.1
+rich==13.6.0
+rpds-py==0.23.1
+rsa==4.9
+scikit-learn==1.1.3
+scipy==1.13.1
+scs==3.2.2
+shap==0.44.1
+six==1.17.0
+slicer==0.0.7
+smmap==5.0.1
+streamlit==1.43.1
+tenacity==8.2.3
+tensorboard==2.18.0
+tensorboard-data-server==0.7.2
+tensorboard-plugin-wit==1.8.1
+tensorflow==2.18.0
+tensorflow-estimator==2.10.0
+tensorflow-io-gcs-filesystem==0.27.0
+tensorflow_intel==2.18.0
+termcolor==2.1.0
+threadpoolctl==3.5.0
+toml==0.10.2
+toolz==1.0.0
+torch==1.13.1
+tornado==6.4.2
+tqdm==4.67.1
+typing_extensions==4.12.2
+tzdata==2023.3
+tzlocal==5.2
+urllib3==2.3.0
+validators==0.22.0
+watchdog==6.0.0
+Werkzeug==3.1.3
+wrapt==1.17.2
+xgboost==1.7.1
+zipp==3.21.0
