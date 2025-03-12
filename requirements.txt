@@ -4,7 +4,6 @@ astunparse==1.6.3
 attrs==25.1.0
 blinker==1.7.0
 cachetools==5.2.0
-catboost==1.2.2
 certifi==2025.1.31
 charset-normalizer==3.4.1
 click==8.1.8
@@ -53,7 +52,7 @@ ml-dtypes==0.4.1
 mlxtend==0.23.0
 namex==0.0.8
 numba==0.60.0
-numpy==2.0.2
+numpy==1.17
 oauthlib==3.2.2
 opt-einsum==3.3.0
 optree==0.14.1
