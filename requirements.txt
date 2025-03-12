@@ -52,7 +52,7 @@ ml-dtypes==0.4.1
 mlxtend==0.23.0
 namex==0.0.8
 numba==0.60.0
-numpy==1.17
+numpy==1.23
 oauthlib==3.2.2
 opt-einsum==3.3.0
 optree==0.14.1
