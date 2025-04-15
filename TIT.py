@@ -98,7 +98,7 @@ if st.button("Submit"):
     explainer_xgb = shap.TreeExplainer(xgb)
     shap_values= explainer_xgb.shap_values(X_standard)
     #shap.initjs()
-    st.set_option('deprecation.showPyplotGlobalUse', False)
+    #st.set_option('deprecation.showPyplotGlobalUse', False)
     shap.force_plot(explainer_xgb.expected_value, shap_values[0],X.iloc[0],link='logit',matplotlib=True)
 
     
